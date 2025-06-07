@@ -32,10 +32,11 @@ int main(int argc, char *argv[]) {
     serv_addr.sin_port = htons(PORT);
 
     //Convert IP from text to binary
-     if (inet_pton(AF_INET, argv[1], &serv_addr.sin_addr) <= 0) {
-         printf("Invalid address/Address not supported\n");
-        return 1;
-    }
+    // if (inet_pton(AF_INET, argv[1], &serv_addr.sin_addr) <= 0) {
+      //  printf("Invalid address/Address not supported\n");
+        //return 1;
+    //}
+    inet_pton(AF_INET, argv[1], &serv_addr.sin_addr);
 
     // struct hostent *he = gethostbyname(argv[1]);
     // if (he == NULL) {
