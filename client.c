@@ -4,6 +4,8 @@
 #include <string.h>
 #include <unistd.h>
 #include <arpa/inet.h>
+#include <netdb.h>
+
 
 #define PORT 5555
 #define BUFFER_SIZE 1024
@@ -30,10 +32,17 @@ int main(int argc, char *argv[]) {
     serv_addr.sin_port = htons(PORT);
 
     // Convert IP from text to binary
-    if (inet_pton(AF_INET, argv[1], &serv_addr.sin_addr) <= 0) {
-        printf("Invalid address/Address not supported\n");
+    // if (inet_pton(AF_INET, argv[1], &serv_addr.sin_addr) <= 0) {
+    //     printf("Invalid address/Address not supported\n");
+    //     return 1;
+    // }
+
+    struct hostent *he = gethostbyname(argv[1]);
+    if (he == NULL) {
+        herror("gethostbyname");
         return 1;
     }
+    memcpy(&serv_addr.sin_addr, he->h_addr_list[0], he->h_length);
 
     // Connect
     if (connect(sock, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0) {
